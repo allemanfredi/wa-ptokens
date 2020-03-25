@@ -1,4 +1,4 @@
-# :robot_face: wa-ptokens
+# :rocket: wa-ptokens
 
 Whatsapp bot for interacting with pTokens.
 
