@@ -5,6 +5,7 @@ extern crate rocket;
 extern crate reqwest;
 extern crate serde;
 
+use bitcoin::network::constants::Network;
 use rocket::request::Form;
 
 mod constants;
@@ -22,9 +23,14 @@ fn new_message(message: Form<wa_message::Message>) -> String {
         request::Which::PbtcOnEthTestnet => constants::PBTC_ON_ETH_TESTNET_ENDPOINT,
     };
 
+    let network: Network = match request.which {
+        request::Which::PbtcOnEthMainnet => Network::Bitcoin,
+        request::Which::PbtcOnEthTestnet => Network::Testnet,
+    };
+
     match request.command {
         request::Command::GetDepositAddress => {
-            deposit_address::get(&request.data, &which.to_string()).unwrap()
+            deposit_address::get(&request.data, &which.to_string(), &network).unwrap()
         }
     }
 }

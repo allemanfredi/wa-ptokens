@@ -1,5 +1,5 @@
 [package]
-name = "wa-bot"
+name = "wa-ptokens"
 version = "0.1.0"
 authors = ["allemanfredi <alle.manfredi@gmail.com>"]
 edition = "2018"
@@ -10,3 +10,5 @@ edition = "2018"
 rocket = "0.4.4"
 reqwest = { version = "0.10", features = ["blocking", "json"] }
 serde = { version = "1.0.105", features = ["derive"] }
+bitcoin = "0.23.0"
+hex = "0.4.2"
