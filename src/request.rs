@@ -19,12 +19,14 @@ impl Display for Which {
 // Command
 pub enum Command {
     GetDepositAddress,
+    MonitorIncomingTransaction,
 }
 
 impl Display for Command {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Command::GetDepositAddress => write!(f, "GET_DEPOSIT_ADDRESS"),
+            Command::MonitorIncomingTransaction => write!(f, "MONITOR_INCOMING_TRANSACTION"),
         }
     }
 }
@@ -62,6 +64,7 @@ pub fn parse(cmd: &String) -> Request {
         },
         match vec[1].as_str() {
             "dep-addr" => Command::GetDepositAddress,
+            "inc-tx" => Command::MonitorIncomingTransaction,
             _ => Command::GetDepositAddress,
         },
         vec[2].clone(),

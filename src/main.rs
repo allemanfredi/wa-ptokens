@@ -10,6 +10,7 @@ use rocket::request::Form;
 
 mod constants;
 mod deposit_address;
+mod incoming_transaction;
 mod request;
 mod wa_message;
 
@@ -18,7 +19,7 @@ fn new_message(message: Form<wa_message::Message>) -> String {
     let request: request::Request = request::parse(&message.Body);
     println!("new request: {}", request);
 
-    let which: &str = match request.which {
+    let endpoint: &str = match request.which {
         request::Which::PbtcOnEthMainnet => constants::PBTC_ON_ETH_MAINNET_ENDPOINT,
         request::Which::PbtcOnEthTestnet => constants::PBTC_ON_ETH_TESTNET_ENDPOINT,
     };
@@ -30,7 +31,15 @@ fn new_message(message: Form<wa_message::Message>) -> String {
 
     match request.command {
         request::Command::GetDepositAddress => {
-            deposit_address::get(&request.data, &which.to_string(), &network).unwrap()
+            deposit_address::get(&request.data, &endpoint.to_string(), &network).unwrap()
+        }
+        request::Command::MonitorIncomingTransaction => {
+            let transaction: incoming_transaction::IncomingTransaction =
+                incoming_transaction::get(&request.data, &endpoint.to_string()).unwrap();
+            match transaction.broadcast {
+                true => format!("{} BROADCASTED", transaction.broadcast_tx_hash),
+                false => format!("{} NOT BROADCASTED", transaction.broadcast_tx_hash),
+            }
         }
     }
 }
